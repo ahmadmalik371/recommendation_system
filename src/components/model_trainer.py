@@ -1,7 +1,18 @@
+# =====================================================================
+# PATH CONFIGURATION (CRUCIAL FIX FOR MODULE NOT FOUND ERROR)
+# =====================================================================
+import sys
+import os
+# This dynamically finds your 'recommendation_system' folder and makes it discoverable
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+
 import numpy as np
 import pandas as pd
 from scipy.sparse import csr_matrix
 from sklearn.neighbors import NearestNeighbors
+
+# This will now load perfectly because of the configuration lines above!
+from src.utils import rmse, mae, precision_at_k, recall_at_k, ndcg_at_k
 
 # =====================================================================
 # NEIGHBORHOOD-BASED METHODS (KNN)
@@ -26,22 +37,20 @@ def build_user_item_matrix(ratings_df, user_col='user_id', item_col='item_id', r
 def mean_center(matrix):
     """
     Mean-center each user's ratings; unrated entries remain zero.
-    
-    Returns mean rating vector and mean-centered matrix as numpy array.
     """
     dense = matrix.toarray()
     user_means = np.true_divide(dense.sum(axis=1), (dense != 0).sum(axis=1))
-    user_means = np.nan_to_num(user_means)  # replace NaN (users with no ratings) with 0
+    user_means = np.nan_to_num(user_means)
     
     mean_centered = dense - user_means[:, np.newaxis]
-    mean_centered[dense == 0] = 0  # keep entries with no rating as 0
+    mean_centered[dense == 0] = 0
     return user_means, mean_centered
 
 def train_knn(mean_centered_matrix, n_neighbors=5, metric='cosine'):
     """
     Fit KNN model on mean-centered user-item matrix.
     """
-    knn = NearestNeighbors(n_neighbors=n_neighbors + 1, metric=metric)  # +1 to ignore self
+    knn = NearestNeighbors(n_neighbors=n_neighbors + 1, metric=metric)
     knn.fit(mean_centered_matrix)
     return knn
 
@@ -53,10 +62,9 @@ def predict_rating(user_index, item_index, user_means, mean_centered_matrix, knn
     distances = distances.flatten()
     indices = indices.flatten()
     
-    # Remove self user
     mask = indices != user_index
     neighbors = indices[mask][:k]
-    sims = 1 - distances[mask][:k]  # cosine similarity from distance
+    sims = 1 - distances[mask][:k]
     
     numerator = 0
     denominator = 0
@@ -66,7 +74,7 @@ def predict_rating(user_index, item_index, user_means, mean_centered_matrix, knn
             numerator += sim * neighbor_rating
             denominator += abs(sim)
     if denominator == 0:
-        return user_means[user_index]  # fallback to user's mean
+        return user_means[user_index]
     
     pred = user_means[user_index] + (numerator / denominator)
     return pred
@@ -81,7 +89,6 @@ def train_sgd_matrix_factorization(ratings_df, user_col='user_id', item_col='ite
     """
     Train matrix factorization using SGD with fixed simultaneous matrix updates.
     """
-    # Create mappings for user and item ids to indices
     user_ids = ratings_df[user_col].unique()
     item_ids = ratings_df[item_col].unique()
     
@@ -91,11 +98,9 @@ def train_sgd_matrix_factorization(ratings_df, user_col='user_id', item_col='ite
     n_users = len(user_ids)
     n_items = len(item_ids)
     
-    # Initialize latent factor matrices with small random values
     U = np.random.normal(scale=0.1, size=(n_users, n_factors))
     V = np.random.normal(scale=0.1, size=(n_items, n_factors))
     
-    # Prepare training data as indexes for efficiency
     user_idx = ratings_df[user_col].map(user_mapper).values
     item_idx = ratings_df[item_col].map(item_mapper).values
     ratings = ratings_df[rating_col].values
@@ -107,16 +112,14 @@ def train_sgd_matrix_factorization(ratings_df, user_col='user_id', item_col='ite
             e = r - prediction
             total_loss += e**2
             
-            # --- FIXED: Cache original state of U[u, :] for simultaneous update ---
             u_old = U[u, :].copy()
             
-            # SGD updates with L2 regularization
             U[u, :] += lr * (e * V[i, :] - reg * U[u, :])
             V[i, :] += lr * (e * u_old - reg * V[i, :])
         
-        rmse = np.sqrt(total_loss / len(ratings))
+        epoch_rmse = rmse(ratings, np.array([U[u].dot(V[i]) for u, i in zip(user_idx, item_idx)]))
         if verbose:
-            print(f"Epoch {epoch+1}/{n_epochs} - RMSE: {rmse:.4f}", flush=True)
+            print(f"Epoch {epoch+1}/{n_epochs} - Training RMSE: {epoch_rmse:.4f}", flush=True)
             
     return U, V, user_mapper, item_mapper
 
@@ -125,12 +128,10 @@ def predict_rating_svd(U, V, user_mapper, item_mapper, user_id, item_id):
     Predict rating for user and item using matrix factorization latent vectors.
     """
     if user_id not in user_mapper or item_id not in item_mapper:
-        return None  # cold start or unknown user/item
+        return None
     
     u_idx = user_mapper[user_id]
     i_idx = item_mapper[item_id]
-    
-    # Compute dot product of user and item latent traits
     return float(U[u_idx, :].dot(V[i_idx, :]))
 
 
@@ -140,70 +141,64 @@ def predict_rating_svd(U, V, user_mapper, item_mapper, user_id, item_id):
 
 if __name__ == "__main__":
     import time
-    import sys
-    import os
-    
-    # Add your src directory root to paths so python can find your other components
-    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
     
     try:
-        # Import your ingestion functions directly from data_ingestion.py
         from src.components.data_ingestion import download_movielens, load_ratings
     except ImportError:
-        print("Error: Could not import data_ingestion! Ensure your folder structure matches 'src/components/data_ingestion.py'")
+        print("Error: Could not import data_ingestion! Check your folder workspace pathways.")
         sys.exit(1)
 
     print("==================================================")
     print("   RUNNING PRODUCTION MOVIELENS PIPELINE TEST      ")
     print("==================================================\n")
 
-    # 1. Fetch data through your Ingestion Layer
     data_path = download_movielens()
     df = load_ratings(data_path)
     print(f"Ingested Real Dataset Shape: {df.shape}\n")
 
-    # Define a real target user and item to evaluate (e.g., User ID: 196, Movie ID: 242)
+    # Define a test target pair
     target_user_id = 196
     target_item_id = 242
 
+    # Find what the actual historical rating was in MovieLens for validation
+    actual_row = df[(df['user_id'] == target_user_id) & (df['item_id'] == target_item_id)]
+    actual_rating = actual_row['rating'].values[0] if not actual_row.empty else 4.0
+    print(f"Ground Truth Reality: User {target_user_id} rated Movie {target_item_id} a {actual_rating:.1f}\n")
+    print("-" * 50)
+
     # ==================================================
-    # PIPELINE 1: PRODUCTION USER-USER KNN
+    # PIPELINE 1: USER-USER KNN
     # ==================================================
     print("Executing Pipeline 1: User-User KNN...")
     matrix, user_cats, item_cats = build_user_item_matrix(df)
     user_means, mean_centered_matrix = mean_center(matrix)
     
-    # Convert real raw ID values to internal sparse positional matrix indexes
     try:
         user_index = list(user_cats).index(target_user_id)
         item_index = list(item_cats).index(target_item_id)
         
         knn_model = train_knn(mean_centered_matrix, n_neighbors=5)
-        knn_pred = predict_rating(
-            user_index=user_index, 
-            item_index=item_index, 
-            user_means=user_means, 
-            mean_centered_matrix=mean_centered_matrix, 
-            knn=knn_model, 
-            k=5
-        )
-        print(f"-> KNN Predicted rating for User {target_user_id} on Movie {target_item_id}: {knn_pred:.2f}\n")
+        knn_pred = predict_rating(user_index, item_index, user_means, mean_centered_matrix, knn_model, k=5)
+        
+        knn_error = rmse(np.array([actual_rating]), np.array([knn_pred]))
+        print(f"-> KNN Predicted rating: {knn_pred:.2f} (Single Point RMSE: {knn_error:.4f})\n")
     except ValueError:
-        print("Target user or item indexes couldn't map correctly to KNN categorical bounds.")
+        print("Target mapping error inside KNN sparse categories.")
         
     print("-" * 50)
 
     # ==================================================
-    # PIPELINE 2: PRODUCTION SGD MATRIX FACTORIZATION
+    # PIPELINE 2: SGD MATRIX FACTORIZATION
     # ==================================================
     print("Executing Pipeline 2: SGD Matrix Factorization...")
-    # Training configurations adjusted to scale beautifully with 100k data rows
     U, V, u_map, i_map = train_sgd_matrix_factorization(
         df, n_factors=10, n_epochs=5, lr=0.01, reg=0.05, verbose=True
     )
     
     svd_pred = predict_rating_svd(U, V, u_map, i_map, target_user_id, target_item_id)
-    print(f"-> SVD Predicted rating for User {target_user_id} on Movie {target_item_id}: {svd_pred:.2f}\n")
+    
+    svd_error = rmse(np.array([actual_rating]), np.array([svd_pred]))
+    print(f"-> SVD Predicted rating: {svd_pred:.2f} (Single Point RMSE: {svd_error:.4f})\n")
     print("==================================================")
     
     time.sleep(1)
