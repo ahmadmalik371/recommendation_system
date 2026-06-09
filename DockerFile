@@ -1,0 +1,16 @@
+FROM python:3.10-slim
+
+WORKDIR /app
+
+# Copy dependency mappings
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy all repository assets
+COPY . .
+
+# Expose server port 
+EXPOSE 8000
+
+# Command to execute your web dashboard engine
+CMD ["python", "src/app/main.py"]

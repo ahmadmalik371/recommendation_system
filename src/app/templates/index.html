@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommendation Engine Insights</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0b0f19; color: #f3f4f6; }
+        
+        /* Notebook Spec: Clip Path Functions */
+        .clipped-widget {
+            clip-path: polygon(0% 0%, 100% 0%, 100% 90%, 93% 100%, 0% 100%);
+        }
+        
+        /* Notebook Spec: Visual Effect Blending & Transform Functions */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .glass-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 20px 40px -15px rgba(99, 102, 241, 0.2);
+        }
+
+        /* Notebook Spec: Dynamic Scroll / Reveal Cascade Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-cascade {
+            animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        /* Safe CSS Attribute Iterator Math Mapping */
+        .animate-cascade[data-index="0"] { animation-delay: 0.00s; }
+        .animate-cascade[data-index="1"] { animation-delay: 0.05s; }
+        .animate-cascade[data-index="2"] { animation-delay: 0.10s; }
+        .animate-cascade[data-index="3"] { animation-delay: 0.15s; }
+        .animate-cascade[data-index="4"] { animation-delay: 0.20s; }
+        .animate-cascade[data-index="5"] { animation-delay: 0.25s; }
+        .animate-cascade[data-index="6"] { animation-delay: 0.30s; }
+        .animate-cascade[data-index="7"] { animation-delay: 0.35s; }
+        .animate-cascade[data-index="8"] { animation-delay: 0.40s; }
+        .animate-cascade[data-index="9"] { animation-delay: 0.45s; }
+    </style>
+</head>
+<body class="p-6 lg:p-12 overflow-x-hidden">
+
+    <div class="max-w-7xl mx-auto space-y-10">
+        
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 pb-6 border-b border-gray-800">
+            <div>
+                <h1 class="text-3xl font-bold tracking-tight bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">PERFORMANCE & INSIGHTS</h1>
+                <p class="text-gray-400 mt-1">Real-time Latent Factor SVD Matrix Factorization Evaluation</p>
+            </div>
+            
+            <form method="get" class="flex items-center gap-3 bg-gray-900/50 p-2 rounded-xl border border-gray-800">
+                <label class="text-sm font-medium text-gray-400 px-2">User Index:</label>
+                <input type="number" name="user_id" value="{{ user_id }}" class="w-24 bg-gray-950 border border-gray-700 rounded-lg px-3 py-1.5 text-indigo-400 font-bold focus:outline-none focus:border-indigo-500">
+                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-1.5 rounded-lg transition-all text-sm">Query Engine</button>
+            </form>
+        </header>
+
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <div class="lg:col-span-2 glass-card rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h3 class="font-semibold text-lg text-gray-200">User Segmentation Curves</h3>
+                        <p class="text-xs text-gray-400">Multi-layered user vector clusters mapping via Vector Scaling</p>
+                    </div>
+                    <span class="text-xs bg-indigo-500/10 text-indigo-400 px-2.5 py-1 rounded-full font-medium border border-indigo-500/20">Zero Asset Overhead</span>
+                </div>
+                
+                <div class="w-full h-36 mt-4 relative">
+                    <svg viewBox="0 0 500 120" class="w-full h-full" preserveAspectRatio="none">
+                        <path d="M0,90 C100,40 180,100 300,50 C380,20 420,80 500,30 L500,120 L0,120 Z" fill="url(#grad1)" opacity="0.4"></path>
+                        <path d="M0,70 C120,110 220,20 320,80 C400,100 450,40 500,65 L500,120 L0,120 Z" fill="url(#grad2)" opacity="0.25"></path>
+                        <defs>
+                            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#6366f1" />
+                                <stop offset="100%" stop-color="#db2777" />
+                            </linearGradient>
+                            <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#4f46e5" />
+                                <stop offset="100%" stop-color="#06b6d4" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="space-y-6 flex flex-col justify-between">
+                <div class="clipped-widget bg-gradient-to-br from-indigo-900/40 to-purple-900/40 border border-indigo-500/20 p-6 flex-1 flex flex-col justify-center relative">
+                    <span class="text-xs text-indigo-400 font-bold tracking-widest uppercase mb-1">Model Optimization</span>
+                    <h2 class="text-4xl font-extrabold text-white tracking-tight">0.9448</h2>
+                    <p class="text-sm text-gray-400 mt-1">Global Validation Target RMSE</p>
+                </div>
+                
+                <div class="glass-card rounded-2xl p-6 flex flex-col justify-center">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <span class="text-xs text-purple-400 font-bold tracking-widest uppercase block mb-1">Target Persona</span>
+                            <h3 class="text-xl font-bold text-white">ID: {{ user_id }}</h3>
+                        </div>
+                        {% if is_cold_start %}
+                        <span class="text-xs bg-amber-500/10 text-amber-400 px-2.5 py-1 rounded-full font-medium border border-amber-500/20">Cold-Start Active</span>
+                        {% else %}
+                        <span class="text-xs bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-full font-medium border border-emerald-500/20">Mapped Vector</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <main class="space-y-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="text-xl font-bold text-gray-100">Top Movie Recommendations</h2>
+                    <p class="text-sm text-gray-400">Personalized rankings sorted via predicted utility score matching</p>
+                </div>
+                <div class="text-xs text-gray-500 font-medium">Grid Layout Engine</div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                {% for movie in movies %}
+                <div class="glass-card rounded-xl p-5 flex flex-col justify-between min-h-[160px] animate-cascade" data-index="{{ movie.delay_index }}">
+                    <div>
+                        <div class="text-xs font-bold text-indigo-400 mb-2">RANK #{{ movie.rank }}</div>
+                        <h4 class="font-semibold text-gray-100 line-clamp-2 text-base">{{ movie.title }}</h4>
+                    </div>
+                    <div class="text-xs text-gray-500 mt-4 pt-3 border-t border-gray-800 flex justify-between items-center">
+                        <span>Release Year</span>
+                        <span class="text-gray-400 font-medium">{{ movie.release }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>
