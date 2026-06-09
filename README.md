@@ -1,3 +1,12 @@
+---
+title: Movie Recs Dashboard
+emoji: 🎬
+colorFrom: gray
+colorTo: pink
+sdk: docker
+app_port: 8000
+---
+
 # 🎬 Premium Recommendation System Insights Dashboard
 
 A real-time Movie Recommendation Engine built using Latent Factor SVD (Singular Value Decomposition) Matrix Factorization, served via a high-performance FastAPI backend and an immersive, custom-animated dashboard interface.
