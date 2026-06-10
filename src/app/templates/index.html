@@ -3,147 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recommendation Engine Insights</title>
+    <title>Personalized Movie Matcher</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0b0f19; color: #f3f4f6; }
-        
-        /* Notebook Spec: Clip Path Functions */
-        .clipped-widget {
-            clip-path: polygon(0% 0%, 100% 0%, 100% 90%, 93% 100%, 0% 100%);
+        body {
+            background: linear-gradient(135deg, #090d16 0%, #111324 100%);
+            min-height: 100vh;
+            color: #f1f5f9;
         }
-        
-        /* Notebook Spec: Visual Effect Blending & Transform Functions */
         .glass-card {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.02);
             backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
-        .glass-card:hover {
-            transform: translateY(-6px) scale(1.02);
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(99, 102, 241, 0.4);
-            box-shadow: 0 20px 40px -15px rgba(99, 102, 241, 0.2);
-        }
-
-        /* Notebook Spec: Dynamic Scroll / Reveal Cascade Animations */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(24px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-cascade {
-            animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
-        }
-
-        /* Safe CSS Attribute Iterator Math Mapping */
-        .animate-cascade[data-index="0"] { animation-delay: 0.00s; }
-        .animate-cascade[data-index="1"] { animation-delay: 0.05s; }
-        .animate-cascade[data-index="2"] { animation-delay: 0.10s; }
-        .animate-cascade[data-index="3"] { animation-delay: 0.15s; }
-        .animate-cascade[data-index="4"] { animation-delay: 0.20s; }
-        .animate-cascade[data-index="5"] { animation-delay: 0.25s; }
-        .animate-cascade[data-index="6"] { animation-delay: 0.30s; }
-        .animate-cascade[data-index="7"] { animation-delay: 0.35s; }
-        .animate-cascade[data-index="8"] { animation-delay: 0.40s; }
-        .animate-cascade[data-index="9"] { animation-delay: 0.45s; }
     </style>
 </head>
-<body class="p-6 lg:p-12 overflow-x-hidden">
+<body class="p-4 md:p-8 font-sans">
 
-    <div class="max-w-7xl mx-auto space-y-10">
-        
-        <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 pb-6 border-b border-gray-800">
+    <header class="max-w-5xl mx-auto mb-8 text-center pt-4">
+        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-white">
+            🍿 CinemaMatch AI
+        </h1>
+        <p class="text-slate-400 text-xs md:text-sm mt-1">Get custom suggestions based on your profile, movie tastes, or mood.</p>
+    </header>
+
+    <section class="max-w-5xl mx-auto mb-10">
+        <div class="glass-card p-5 rounded-2xl shadow-xl grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+            
             <div>
-                <h1 class="text-3xl font-bold tracking-tight bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">PERFORMANCE & INSIGHTS</h1>
-                <p class="text-gray-400 mt-1">Real-time Latent Factor SVD Matrix Factorization Evaluation</p>
-            </div>
-            
-            <form method="get" class="flex items-center gap-3 bg-gray-900/50 p-2 rounded-xl border border-gray-800">
-                <label class="text-sm font-medium text-gray-400 px-2">User Index:</label>
-                <input type="number" name="user_id" value="{{ user_id }}" class="w-24 bg-gray-950 border border-gray-700 rounded-lg px-3 py-1.5 text-indigo-400 font-bold focus:outline-none focus:border-indigo-500">
-                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-1.5 rounded-lg transition-all text-sm">Query Engine</button>
-            </form>
-        </header>
-
-        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            
-            <div class="lg:col-span-2 glass-card rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between">
-                <div class="flex justify-between items-center mb-6">
-                    <div>
-                        <h3 class="font-semibold text-lg text-gray-200">User Segmentation Curves</h3>
-                        <p class="text-xs text-gray-400">Multi-layered user vector clusters mapping via Vector Scaling</p>
-                    </div>
-                    <span class="text-xs bg-indigo-500/10 text-indigo-400 px-2.5 py-1 rounded-full font-medium border border-indigo-500/20">Zero Asset Overhead</span>
-                </div>
-                
-                <div class="w-full h-36 mt-4 relative">
-                    <svg viewBox="0 0 500 120" class="w-full h-full" preserveAspectRatio="none">
-                        <path d="M0,90 C100,40 180,100 300,50 C380,20 420,80 500,30 L500,120 L0,120 Z" fill="url(#grad1)" opacity="0.4"></path>
-                        <path d="M0,70 C120,110 220,20 320,80 C400,100 450,40 500,65 L500,120 L0,120 Z" fill="url(#grad2)" opacity="0.25"></path>
-                        <defs>
-                            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#6366f1" />
-                                <stop offset="100%" stop-color="#db2777" />
-                            </linearGradient>
-                            <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#4f46e5" />
-                                <stop offset="100%" stop-color="#06b6d4" />
-                            </linearGradient>
-                        </defs>
-                    </svg>
-                </div>
+                <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">User Account Profile</label>
+                <input type="number" id="userProfile" value="199" min="1" max="943" class="w-full bg-slate-900/80 border border-slate-700/60 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-500 text-white font-medium">
             </div>
 
-            <div class="space-y-6 flex flex-col justify-between">
-                <div class="clipped-widget bg-gradient-to-br from-indigo-900/40 to-purple-900/40 border border-indigo-500/20 p-6 flex-1 flex flex-col justify-center relative">
-                    <span class="text-xs text-indigo-400 font-bold tracking-widest uppercase mb-1">Model Optimization</span>
-                    <h2 class="text-4xl font-extrabold text-white tracking-tight">0.9448</h2>
-                    <p class="text-sm text-gray-400 mt-1">Global Validation Target RMSE</p>
+            <div>
+                <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Choose a Category</label>
+                <select id="genreSelect" class="w-full bg-slate-900/80 border border-slate-700/60 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-500 text-white font-medium">
+                    <option value="All">All Categories</option>
+                    <option value="Action">Action</option>
+                    <option value="Adventure">Adventure</option>
+                    <option value="Animation">Animation</option>
+                    <option value="Comedy">Comedy</option>
+                    <option value="Crime">Crime</option>
+                    <option value="Drama">Drama</option>
+                    <option value="Horror">Horror</option>
+                    <option value="Romance">Romance</option>
+                    <option value="Sci-Fi">Sci-Fi</option>
+                    <option value="Thriller">Thriller</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Based on a Movie You Love</label>
+                <input type="text" id="favMovie" placeholder="Optional (e.g. Toy Story)" class="w-full bg-slate-900/80 border border-slate-700/60 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-500 text-white placeholder-slate-600">
+            </div>
+
+            <div>
+                <button onclick="triggerDiscovery()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm py-2.5 px-4 rounded-xl transition duration-200 shadow-lg shadow-indigo-600/20 active:scale-[0.98]">
+                    Generate Recommendations
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <main class="max-w-5xl mx-auto">
+        <h3 class="text-lg font-bold text-slate-200 mb-4 flex items-center gap-2">
+            <span class="w-1.5 h-4 bg-indigo-500 rounded-full"></span>
+            Your Curated Selections
+        </h3>
+        
+        <div id="resultsLayout" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            </div>
+    </main>
+
+    <script>
+        async function triggerDiscovery() {
+            const container = document.getElementById('resultsLayout');
+            
+            // Extract interface values cleanly
+            const uid = document.getElementById('userProfile').value;
+            const genre = document.getElementById('genreSelect').value;
+            const fav = encodeURIComponent(document.getElementById('favMovie').value);
+
+            // Construct dynamic routing query params
+            const targetUrl = `/api/discover?user_id=${uid}&genre=${genre}&favorite_movie=${fav}`;
+            
+            container.innerHTML = `
+                <div class="col-span-full text-center py-12 text-sm text-slate-500 tracking-wide font-medium animate-pulse">
+                    Scanning neural catalogs...
                 </div>
-                
-                <div class="glass-card rounded-2xl p-6 flex flex-col justify-center">
-                    <div class="flex items-center justify-between">
+            `;
+
+            try {
+                const response = await fetch(targetUrl);
+                if (!response.ok) throw new Error('Data transmission drop.');
+                const movies = await response.json();
+
+                container.innerHTML = '';
+
+                if (!movies || movies.length === 0) {
+                    container.innerHTML = `
+                        <div class="col-span-full text-center py-12 text-sm text-slate-500 bg-slate-900/20 rounded-2xl border border-dashed border-slate-800">
+                            No matching items identified in this subcategory sequence. Try adjusting fields.
+                        </div>`;
+                    return;
+                }
+
+                movies.forEach((movie) => {
+                    const card = document.createElement('div');
+                    card.className = 'glass-card p-5 rounded-2xl flex flex-col justify-between hover:border-slate-600/40 transition-all duration-200 hover:-translate-y-1 group';
+                    
+                    // Create dynamic badge labels matching categorical output listings
+                    const badges = movie.genres.map(g => 
+                        `<span class="text-[10px] bg-slate-800/80 text-slate-300 px-2 py-0.5 rounded border border-slate-700/40 font-medium">${g}</span>`
+                    ).join(' ');
+
+                    card.innerHTML = `
                         <div>
-                            <span class="text-xs text-purple-400 font-bold tracking-widest uppercase block mb-1">Target Persona</span>
-                            <h3 class="text-xl font-bold text-white">ID: {{ user_id }}</h3>
+                            <div class="w-full aspect-[4/3] bg-gradient-to-br from-indigo-950/40 to-slate-900 rounded-xl mb-4 border border-slate-800/50 flex items-center justify-center group-hover:from-indigo-900/40 transition-colors">
+                                <span class="text-2xl text-indigo-500/40 font-bold group-hover:text-indigo-400/60 transition-colors">🎬</span>
+                            </div>
+                            <h4 class="text-sm font-bold text-slate-100 group-hover:text-white transition-colors leading-tight mb-2">${movie.title}</h4>
                         </div>
-                        {% if is_cold_start %}
-                        <span class="text-xs bg-amber-500/10 text-amber-400 px-2.5 py-1 rounded-full font-medium border border-amber-500/20">Cold-Start Active</span>
-                        {% else %}
-                        <span class="text-xs bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-full font-medium border border-emerald-500/20">Mapped Vector</span>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </section>
+                        <div class="flex flex-wrap gap-1 mt-2">
+                            ${badges}
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
 
-        <main class="space-y-6">
-            <div class="flex justify-between items-center">
-                <div>
-                    <h2 class="text-xl font-bold text-gray-100">Top Movie Recommendations</h2>
-                    <p class="text-sm text-gray-400">Personalized rankings sorted via predicted utility score matching</p>
-                </div>
-                <div class="text-xs text-gray-500 font-medium">Grid Layout Engine</div>
-            </div>
+            } catch (err) {
+                console.error(err);
+                container.innerHTML = `<div class="col-span-full text-center py-12 text-sm text-rose-500 font-medium">Failed to retrieve data streams from calculation matrices. Check configuration.</div>`;
+            }
+        }
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-                {% for movie in movies %}
-                <div class="glass-card rounded-xl p-5 flex flex-col justify-between min-h-[160px] animate-cascade" data-index="{{ movie.delay_index }}">
-                    <div>
-                        <div class="text-xs font-bold text-indigo-400 mb-2">RANK #{{ movie.rank }}</div>
-                        <h4 class="font-semibold text-gray-100 line-clamp-2 text-base">{{ movie.title }}</h4>
-                    </div>
-                    <div class="text-xs text-gray-500 mt-4 pt-3 border-t border-gray-800 flex justify-between items-center">
-                        <span>Release Year</span>
-                        <span class="text-gray-400 font-medium">{{ movie.release }}</span>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        </main>
-    </div>
-
+        // Initialize setup presentation values automatically on boot sequence
+        window.onload = triggerDiscovery;
+    </script>
 </body>
 </html>

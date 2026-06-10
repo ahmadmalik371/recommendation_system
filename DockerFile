@@ -12,5 +12,5 @@ COPY . .
 # Expose server port 
 EXPOSE 8000
 
-# Command to execute your web dashboard engine
-CMD ["python", "src/app/main.py"]
+# CORRECTED: Run using Uvicorn to keep the web server alive on port 8000
+CMD ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
